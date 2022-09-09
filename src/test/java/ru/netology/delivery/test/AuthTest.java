@@ -66,5 +66,14 @@ class AuthTest {
                 .shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 
-
+    //незарегистрированный пользователь
+    @Test
+    void shouldSendFormRandomLogin(){
+        var invalidUser = Data.Registration.getUser("blocked");
+        $("[data-test-id='login'] .input__box .input__control").val(Data.Registration.getRandomLogin());
+        $("[data-test-id='password'] .input__box .input__control").val(invalidUser.getPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id=error-notification] .notification__content")
+                .shouldHave(Condition.exactText("Ошибка! " + "Неверно указан логин или пароль"));
+    }
 }
