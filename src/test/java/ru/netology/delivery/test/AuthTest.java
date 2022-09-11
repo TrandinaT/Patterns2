@@ -68,12 +68,36 @@ class AuthTest {
 
     //незарегистрированный пользователь
     @Test
-    void shouldSendFormRandomLogin(){
+    void unregisteredUser() {
         var invalidUser = Data.Registration.getUser("blocked");
-        $("[data-test-id='login'] .input__box .input__control").val(Data.Registration.getRandomLogin());
+        $("[data-test-id='login'] .input__box .input__control").val(invalidUser.getLogin());
         $("[data-test-id='password'] .input__box .input__control").val(invalidUser.getPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id=error-notification] .notification__content")
+                .shouldHave(Condition.exactText("Ошибка! " + "Пользователь заблокирован"));
+    }
+
+    //зарегистрированный пользователь неверный логин и правильный пароль
+    @Test
+    void invalidUsernameAndCorrectPassword() {
+        var validUser = Data.Registration.getRegisteredUser("blocked");
+        $("[data-test-id='login'] .input__box .input__control").val(Data.Registration.getRandomLogin());
+        $("[data-test-id='password'] .input__box .input__control").val(validUser.getPassword());
         $("[data-test-id='action-login']").click();
         $("[data-test-id=error-notification] .notification__content")
                 .shouldHave(Condition.exactText("Ошибка! " + "Неверно указан логин или пароль"));
     }
+
+    //зарегистрированный пользователь правильный логин и неверный пароль
+    @Test
+    void correctUsernameAndIncorrectPassword() {
+        var validUser = Data.Registration.getRegisteredUser("blocked");
+        $("[data-test-id='login'] .input__box .input__control").val(validUser.getLogin());
+        $("[data-test-id='password'] .input__box .input__control").val(Data.Registration.getRandomPassword());
+        $("[data-test-id='action-login']").click();
+        $("[data-test-id=error-notification] .notification__content")
+                .shouldHave(Condition.exactText("Ошибка! " + "Неверно указан логин или пароль"));
+    }
+
+
 }
