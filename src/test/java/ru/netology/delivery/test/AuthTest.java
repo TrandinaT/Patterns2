@@ -74,7 +74,7 @@ class AuthTest {
         $("[data-test-id='password'] .input__box .input__control").val(invalidUser.getPassword());
         $("[data-test-id='action-login']").click();
         $("[data-test-id=error-notification] .notification__content")
-                .shouldHave(Condition.exactText("Ошибка! " + "Пользователь заблокирован"));
+                .shouldHave(Condition.exactText("Ошибка! " + "Неверно указан логин или пароль"));
     }
 
     //зарегистрированный пользователь неверный логин и правильный пароль
